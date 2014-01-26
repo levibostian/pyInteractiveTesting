@@ -1,0 +1,5 @@
+# grader input.txt
+# Enter one value per line per input() statement to send to student's assignment.
+4
+12
+34
