@@ -18,19 +18,18 @@ def main():
     checkInputFileExists()
 
     output = getOutputHeader()
-    for subdir, dirs, files in os.walk("assignments/"):
-        for fil in files:
-            if fil.endswith(".py"):
-                fil = open("assignments/"+fil, "r")
+    for fil in os.listdir("assignments/"):
+        if fil.endswith(".py"):
+            fil = open("assignments/"+fil, "r")
 
-                output += getStudentName(fil)+"\n"
+            output += getStudentName(fil)+"\n"
 
-                results = runTests(fil.name)
-                
-                if results == None:
-                    output += "None\n\n"
-                else: 
-                    output += results+"\n\n"
+            results = runTests(fil.name)
+            
+            if results == None:
+                output += "None\n\n"
+            else: 
+                output += results+"\n\n"
     writeResultsToFile(output)
 
 def getOutputHeader():
@@ -72,8 +71,11 @@ def runTests(filName):
     inputFil.close()
 
     try:
-        child.expect(pexpect.EOF, timeout=1)
+        # child.expect(pexpect.EOF, timeout=1)
+        child.expect(pexpect.EOF, timeout=2)
+        child.close()
     except:
         return child.before.decode(encoding='UTF-8') # Translate byte to string. Need for Python 3.
+    return child.before.decode(encoding='UTF-8') # Translate byte to string. Need for Python 3.
 
 main()
