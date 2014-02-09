@@ -14,6 +14,7 @@ import time
 def main():
     util.renameAssignmentFiles()
 
+    clearOutput()
     checkInputFileExists()
 
     inputList = processInput()
@@ -37,6 +38,11 @@ def main():
             else: 
                 output += results
     writeResultsToFile(output)
+
+def clearOutput():
+    outputFil = open("output.txt", 'w')
+    outputFil.write("")
+    outputFil.close()
 
 def processInput():
     inputSetsList = []
