@@ -19,7 +19,9 @@ def main():
     inputList = processInput()
 
     output = getOutputHeader()
-    for fil in os.listdir("assignments/"):
+    assignmentNames = os.listdir("assignments/")
+    assignmentNames.sort()
+    for fil in assignmentNames:
         if fil.endswith(".py"):
             fil = open("assignments/"+fil, "r")
             results = ""
