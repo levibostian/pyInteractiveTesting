@@ -96,6 +96,7 @@ def getStudentName(fil):
 
 def runTests(filName, inSet):
     child = pexpect.spawn("python3 "+filName)
+    time.sleep(.5) #needs sleep to allow print() to go to console
 
     for item in inSet:
         child.sendline(item)
