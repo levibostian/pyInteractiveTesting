@@ -1,10 +1,3 @@
-"""
-File: grader.py
-code: Levi Bostian - bostianl@uni.edu
-Description: Script to iterate through all students programs, tests programs with certain input, 
-             and sends output to output file for easy grading. 
-"""
-
 import os
 import pexpect 
 import sys
@@ -31,12 +24,12 @@ def main():
 
             runsCount = 1
             for inputSet in inputList:
-                results += "### Run "+str(runsCount)+"###\n"
+                results += "### Run "+str(runsCount)+" ###\n"
                 results += runTests(fil.name, inputSet)
                 results += "\n\n"
                 runsCount += 1
             
-            if results == None:
+            if results is None:
                 output += "None"
             else: 
                 output += results
@@ -82,21 +75,25 @@ def writeResultsToFile(output):
 def checkInputFileExists():
     try:
         inputFil = open('input.txt', 'r')
+        inputFil.close()
     except IOError:
-        if input("input.txt file missing. Generate one?: (y/n): ").lower() == "y":
-            generateInputFil()
+        generateInputFil()
+        print("input.txt file missing. New file generated.")
+        print("Please edit input file and try again.")
         sys.exit()
-    inputFil.close()
 
 def generateInputFil():
     newInputFil = open('input.txt', 'w')
-    fileStr = "# grader input.txt\n"+ \
-        "# Enter one value per line per input() statement to send to student's assignment."
+    fileStr = \
+        "# tester input.txt\n"+ \
+        "# lines beginning with # are comments.\n"+ \
+        "# Enter one value per line per input() statement to send to script.\n"+ \
+        "# Separate sets of input statements with a blank line.\n"
     newInputFil.write(fileStr)
     newInputFil.close()
 
 def getStudentName(fil):
-    return "--- Student Last Name: "+fil.name.split('/')[1][:-3].title()+" ---" #return last name
+    return "--- File name: "+fil.name.split('/')[1][:-3].title()+" ---"
 
 def runTests(filName, inSet):
     child = pexpect.spawn("python3 "+filName)

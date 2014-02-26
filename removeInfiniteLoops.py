@@ -1,5 +1,5 @@
-def infiniteLoopRemove(filName, searchStr):
-    fil = open(filName, 'r+')
+def infiniteLoopRemove(searchStr):
+    fil = open("output.txt", 'r+')
 
     outputStr = ""
     firstTime = True #first time seeing infinite loop
@@ -8,20 +8,15 @@ def infiniteLoopRemove(filName, searchStr):
         if line.strip() == searchStr.strip():
             if firstTime:
                 outputStr += line
-                outputStr += "<<<<<<<<<< Infinite loop by user >>>>>>>>>>"
+                outputStr += "<<<<<<<<<< Infinite loop with above text >>>>>>>>>>"
                 firstTime = False
             else:
                 continue
         else:
             outputStr += line
 
-    fil.write("")
-    fil.close()
-
-    fil = open(filName, 'w')
     fil.write(outputStr)
     fil.close()
 
-inputFil = input("Input file: ")
 search = input("String to search for: ")
-infiniteLoopRemove(inputFil, search)
+infiniteLoopRemove(search)

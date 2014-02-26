@@ -1,6 +1,5 @@
 ##pyInteractiveTesting
 
-
 When testing a Python script that requires user input from the command-line:
 ```python
 name = input("Enter your name: ")
@@ -22,8 +21,10 @@ To execute this program, you will need to configure these steps:
 * Edit the input.txt file. On each line, type the text to send to a given input statement. For each separate group of inputs, enter an empty line. 
 Example contents of input.txt:  
 ```
-# grader input.txt
-# Enter one value per line input() statement to sent to student's assignment.  
+# tester input.txt
+# lines beginning with # are comments.
+# Enter one value per line per input() statement to send to script.
+# Separate sets of input statements with a blank line.
 5
 try this text!
 65.7
@@ -39,6 +40,15 @@ The above file will run each Python script in the ```assignments/``` directory t
 python3 grader.py
 ```
 Once execution is complete, the program will generate ```output.txt``` containing the command-line output a user would have seen if they ran the program manually. 
+
+###Notes:
+pyInteractiveTesting only works on Linux machines as it depends on the pexpect Python library.
+
+If the output file ends up having infinite loops inside of it, opening up the output file may be very slow. To help conquer this issue, use the removeInfiniteLoops.py utility file:
+```python
+python3 removeInfiniteLoops.py
+```
+The program will prompt for the text to search for in the output.txt file that is the infinite loop text. output.txt will be edited to fix the infinite loop issue.
 
 ###License:
 
