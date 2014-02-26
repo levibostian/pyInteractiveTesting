@@ -40,8 +40,27 @@ def main():
                 output += "None"
             else: 
                 output += results
-
+    output = checkForInfiniteLoops(output)
     writeResultsToFile(output)
+
+def checkForInfiniteLoops(outStr):
+    lineCountOccur = 0
+    prevLine = ""
+    searchStrs = []
+
+    for line in outStr:
+        if line == prevLine:
+            lineCountOccur += 1
+            if lineCountOccur > 10 and not (line in searchStrs):
+                searchStrs.append(line)
+        else:
+            lineCountOccur = 0
+        prevLine = line
+
+    for items in searchStrs:
+        outStr = util.infiniteLoopRemove(outStr, items)
+
+    return outStr
 
 def clearOutput():
     outputFil = open("output.txt", 'w')
