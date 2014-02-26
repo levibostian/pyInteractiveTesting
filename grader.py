@@ -29,14 +29,18 @@ def main():
 
             output += getStudentName(fil)+"\n"
 
+            runsCount = 1
             for inputSet in inputList:
+                results += "### Run "+str(runsCount)+"###\n"
                 results += runTests(fil.name, inputSet)
                 results += "\n\n"
+                runsCount += 1
             
             if results == None:
                 output += "None"
             else: 
                 output += results
+
     writeResultsToFile(output)
 
 def clearOutput():
