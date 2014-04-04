@@ -4,6 +4,9 @@ import sys
 import util # util.py
 import time
 
+FUNCTION_TEST_CLASS_NAME = "functionTestClass.py"
+INIT_FILE_NAME = "assignments/__init__.py"
+
 def main():
     util.renameAssignmentFiles()
 
@@ -16,7 +19,7 @@ def main():
     assignmentNames = os.listdir("assignments/")
     assignmentNames.sort()
     for fil in assignmentNames:
-        if fil.endswith(".py"):
+        if fil.endswith(".py") and not fil == INIT_FILE_NAME and len(fil) > 3:
             fil = open("assignments/"+fil, "r")
             results = ""
 
@@ -95,18 +98,61 @@ def generateInputFil():
 def getStudentName(fil):
     return "--- File name: "+fil.name.split('/')[1][:-3].title()+" ---"
 
-def runTests(filName, inSet):
-    child = pexpect.spawn("python3 "+filName)
-    time.sleep(.5) #needs sleep to allow print() to go to console
+def isInputFunctionCall(inputStr):
+    return inputStr[0] == ":" and "(" in inputStr and ")" in inputStr
 
-    for item in inSet:
-        child.sendline(item)
+# input: assignments/levi.py output: assignments.levi
+def getImportFileName(fileName):
+    return str(fileName).replace("/", ".")[:-3]
 
+def getFuncName(funcStr):
+    accum = ""
+
+    for char in funcStr:
+        if char == "(":
+            return accum
+        else:
+            accum += char
+
+def createTestFunctionFile(funcCall, fileNameToTestAgainst):
+    fileNameToTestAgainst = getImportFileName(fileNameToTestAgainst)
+
+    testClassText = "from %s import %s\n" \
+                    "\n" \
+                    "print(%s)\n" % (fileNameToTestAgainst, getFuncName(funcCall), funcCall)
+
+    initFile = open(INIT_FILE_NAME, 'w')
+    initFile.write("")
+    initFile.close()
+
+    testFile = open(FUNCTION_TEST_CLASS_NAME, "w")
+    testFile.write(testClassText)
+    testFile.close()
+
+def returnChildProcessOutput(child):
     try:
         child.expect(pexpect.EOF, timeout=1)
         child.close()
     except:
         return child.before.decode(encoding='UTF-8') # Translate byte to string. Need for Python 3.
     return child.before.decode(encoding='UTF-8') # Translate byte to string. Need for Python 3.
+
+def runTests(filName, inSet):
+    for item in inSet:
+        if isInputFunctionCall(item):
+            createTestFunctionFile(item[1:], filName)
+            child = pexpect.spawn("python3 "+FUNCTION_TEST_CLASS_NAME)
+            time.sleep(.5) #needs sleep to allow print() to go to console
+
+            os.remove(FUNCTION_TEST_CLASS_NAME)
+            os.remove(INIT_FILE_NAME)
+
+            return returnChildProcessOutput(child)
+        else:
+            child = pexpect.spawn("python3 "+filName)
+            time.sleep(.5) #needs sleep to allow print() to go to console
+            child.sendline(item)
+
+    return returnChildProcessOutput(child)
 
 main()
