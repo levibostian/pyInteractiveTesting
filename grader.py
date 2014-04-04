@@ -91,7 +91,8 @@ def generateInputFil():
         "# tester input.txt\n"+ \
         "# lines beginning with # are comments.\n"+ \
         "# Enter one value per line per input() statement to send to script.\n"+ \
-        "# Separate sets of input statements with a blank line.\n"
+        "# Separate sets of input statements with a blank line.\n"+ \
+        "# function calls are in format => :funcName(arg1, arg2) and must be separated by new lines.\n"
     newInputFil.write(fileStr)
     newInputFil.close()
 

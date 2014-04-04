@@ -8,6 +8,8 @@ it is a pain manually typing those commands in all the time. So why not automate
 
 Why not send the console output to a file to view later? Why not execute the script multiple times with a set of given outputs? Why not take a group of scripts and run all of them with these inputs and have all of the outputs be sent to the output file?
 
+The test script also includes built in method to call functions with arguments in automation multiple times as well.
+
 ###Install:  
 ```
 git clone git@github.com:levibostian/pyInteractiveTesting.git
@@ -25,6 +27,7 @@ Example contents of input.txt:
 # lines beginning with # are comments.
 # Enter one value per line per input() statement to send to script.
 # Separate sets of input statements with a blank line.
+# function calls are in format => :funcName(arg1, arg2) and must be separated by new lines.
 5
 try this text!
 65.7
@@ -32,8 +35,10 @@ try this text!
 now try this set of inputs
 000
 -1
+
+:fibonacci(100)
 ```
-The above file will run each Python script in the ```assignments/``` directory twice. Once with inputs: 5, "try this text!", and 65.7. And the second time with the inputs: "now try this et of inputs", 000, -1. 
+The above file will run each Python script in the ```assignments/``` directory three times. Once with inputs: 5, "try this text!", and 65.7. The second time with the inputs: "now try this et of inputs", 000, -1. And the third time it will call the function, fibonacci with argument 100.
 
 * Now, simply run the script!  
 ```
@@ -49,6 +54,8 @@ If the output file ends up having infinite loops inside of it, opening up the ou
 python3 removeInfiniteLoops.py
 ```
 The program will prompt for the text to search for in the output.txt file that is the infinite loop text. output.txt will be edited to fix the infinite loop issue.
+
+Lastly, this code is pretty hacky so be warned. It was meant to be a quick and dirty tester so it was created quick and dirty.
 
 ###License:
 
