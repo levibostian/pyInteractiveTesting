@@ -139,8 +139,8 @@ def returnChildProcessOutput(child):
     return child.before.decode(encoding='UTF-8') # Translate byte to string. Need for Python 3.
 
 def runTests(filName, inSet):
-    for item in inSet:
-        if isInputFunctionCall(item):
+    if isInputFunctionCall(inSet[0]): #first item only
+        for item in inSet:
             createTestFunctionFile(item[1:], filName)
             child = pexpect.spawn("python3 "+FUNCTION_TEST_CLASS_NAME)
             time.sleep(.5) #needs sleep to allow print() to go to console
@@ -149,8 +149,9 @@ def runTests(filName, inSet):
             os.remove(INIT_FILE_NAME)
 
             return returnChildProcessOutput(child)
-        else:
-            child = pexpect.spawn("python3 "+filName)
+    else:
+        child = pexpect.spawn("python3 "+filName)
+        for item in inSet:
             time.sleep(.5) #needs sleep to allow print() to go to console
             child.sendline(item)
 
